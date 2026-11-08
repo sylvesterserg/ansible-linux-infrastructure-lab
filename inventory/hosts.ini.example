@@ -1,0 +1,3 @@
+# Replace example IP and username to match YOUR disposable lab target.
+[linux_servers]
+rocky-node1 ansible_host=192.0.2.10 ansible_user=ansible

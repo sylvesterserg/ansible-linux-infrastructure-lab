@@ -1,0 +1,21 @@
+# Never publish real target addresses or credentials
+inventory/hosts.ini
+.env
+.env.*
+*.log
+*.retry
+*.pem
+*.key
+id_ed25519*
+.vault_pass*
+*.vault
+__pycache__/
+*.pyc
+.DS_Store
+
+# Original session screenshots: local archival only, NEVER publish
+private-originals/
+
+# macOS metadata
+._*
+.DS_Store

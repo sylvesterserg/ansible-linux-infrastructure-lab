@@ -1,0 +1,58 @@
+---
+- name: Deploy Rocky Linux web server
+  hosts: linux_servers
+  become: true
+
+  tasks:
+    - name: Install Nginx
+      ansible.builtin.dnf:
+        name: nginx
+        state: present
+
+    - name: Create custom homepage
+      ansible.builtin.copy:
+        dest: /usr/share/nginx/html/index.html
+        content: |
+          <!DOCTYPE html>
+          <html>
+          <head><title>CloudOps Automation Lab</title></head>
+          <body>
+            <h1>CloudOps Infrastructure Automation</h1>
+            <p>Deployed automatically using Ansible.</p>
+            <p>Managed by Sylvect Tech LLC</p>
+          </body>
+          </html>
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Enable and start Nginx
+      ansible.builtin.service:
+        name: nginx
+        enabled: true
+        state: started
+
+    - name: Install firewalld Python bindings
+      ansible.builtin.dnf:
+        name: python3-firewall
+        state: present
+
+    - name: Allow HTTP through firewalld
+      ansible.posix.firewalld:
+        service: http
+        permanent: true
+        immediate: true
+        state: enabled
+
+    - name: Verify Nginx is serving HTTP
+      ansible.builtin.uri:
+        url: http://127.0.0.1/
+        return_content: true
+        status_code: 200
+      register: web_result
+      changed_when: false
+
+    - name: Verify deployed page content
+      ansible.builtin.assert:
+        that:
+          - "'CloudOps Infrastructure Automation' in web_result.content"
