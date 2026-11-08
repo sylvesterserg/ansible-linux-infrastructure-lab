@@ -56,5 +56,3 @@
       ansible.builtin.assert:
         that:
           - "'CloudOps Infrastructure Automation' in web_result.content"
-
-  - broken: [
